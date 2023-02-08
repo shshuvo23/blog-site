@@ -23,7 +23,7 @@ class CategoryController extends Controller
     public function manage()
     {
         $this->categoris = Category::all();
-        return view('category.manage', ['categoris' => $this->categoris]);
+        // return view('category.manage', ['categoris' => $this->categoris]);
     }
 
     public function edit($id)
@@ -32,18 +32,19 @@ class CategoryController extends Controller
         return view('category.edit', ['category' => $this->category]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        Category::updateCategory($request, $id);
-        return redirect('category/manage')->with('message', 'Updated');
-
+        // return $request->name;
+        Category::updateCategory($request);
+        return response()->json([
+            "success" => "Category updated successfully."
+        ]);
+        // return redirect('category/manage')->with('message', 'Updated');
     }
 
     public function delete($id)
     {
         Category::deleteCategory($id);
         return redirect('category/manage')->with('message', 'Deleted');
-
     }
-
 }

@@ -17,7 +17,8 @@ class BlogController extends Controller
     public function index()
     {
         $this->blogs = Blog::all();
-        return view('blog.manage', ['blogs' => $this->blogs]);
+        $this->categories = Category::all();
+        return view('blog.manage', ['blogs' => $this->blogs, 'categories' => $this->categories]);
     }
 
     /**
@@ -75,10 +76,13 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        Blog::updateBlog($request, $id);
-        return redirect('/blog/manage')->with('message', 'update successfully');
+        Blog::updateBlog($request);
+        return response()->json([
+            "success" => "Category updated successfully."
+        ]);
+        // return redirect('/blog/manage')->with('message', 'update successfully');
     }
 
     /**

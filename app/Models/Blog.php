@@ -24,7 +24,13 @@ class Blog extends Model
 
     public static function newBlog($request)
     {
-        self::saveBasicInfO(new Blog(), $request, self::getImageUrl($request));
+        self::$blog = new Blog();
+        self::$blog->category_id       = $request->category_id;
+        self::$blog->title             = $request->title;
+        self::$blog->short_description = $request->short_description;
+        self::$blog->long_description  = $request->long_description;
+        self::$blog->image = self::getImageUrl($request);
+        self::$blog->save();
     }
 
     public function category()
@@ -32,9 +38,9 @@ class Blog extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public static function updateBlog($request, $id)
+    public static function updateBlog($request)
     {
-        self::$blog = Blog::find($id);
+        self::$blog = Blog::find($request->id);
         if ($request->file('image'))
         {
             if (file_exists(self::$blog->image))

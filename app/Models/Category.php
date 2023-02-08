@@ -18,7 +18,7 @@ class Category extends Model
         self::$imageName = self::$image->getClientOriginalName();
         self::$directory = 'category-image/';
         self::$image->move(self::$directory, self::$imageName);
-        return self::$directory.self::$imageName;
+        return self::$directory . self::$imageName;
     }
 
     public static function newCategory($request)
@@ -30,37 +30,32 @@ class Category extends Model
         self::$category->save();
     }
 
-    public static function updateCategory($request, $id)
+    public static function updateCategory($request)
     {
-        self::$category = Category::find($id);
-        if($request->file('image'))
-        {
-            if (file_exists(self::$category->image))
-            {
-                unlink(self::$category->image);
-            }
+        // return $request->name;
+        self::$category = Category::find($request->id);
+        if ($request->file('image')) {
+            // return 'ggggg';
+            // if (file_exists(self::$category->image)) {
+            //     unlink(self::$category->image);
+            // }
             self::$imageUrl = self::getImageUrl($request);
-        }
-        else
-        {
+        } else {
             self::$imageUrl = self::$category->image;
         }
+        // return self::$category->image;
         self::$category->name = $request->name;
         self::$category->description = $request->description;
         self::$category->image = self::$imageUrl;
         self::$category->save();
-
     }
 
     public static function deleteCategory($id)
     {
         self::$category = Category::find($id);
-        if (file_exists(self::$category->image))
-        {
+        if (file_exists(self::$category->image)) {
             unlink(self::$category->image);
         }
         self::$category->delete();
-
     }
-
 }
